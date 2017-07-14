@@ -1,0 +1,9 @@
+Package: GabzCode
+Title: GabzCode for this project
+Description: To tackle this problem
+Version: 0.0
+License: For my eyes only
+Author: Gabriel Oana <bsr@example.com>
+Maintainer: Gabriel Oana <bsr@example.com>
+Imports:
+    dplyr (>= 0.4.3)

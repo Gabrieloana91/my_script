@@ -34,8 +34,12 @@ shinyServer(function(input, output, session) {
       return(list(
         src = paste("www/ct_logo.png")))
     }
+    else if(input$game_code %in% c("MM","CC","BQ","BG")){
+      return(list(
+        src = paste("www/casual_logo.png")))
+    }
     
   }, deleteFile = FALSE)
   
-
+  
 })

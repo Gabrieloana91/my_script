@@ -7,7 +7,7 @@ shinyUI(fluidPage(
   
   titlePanel("Project St Peter"),
   
-  column(4, wellPanel(selectInput("command", label = h4("Task"),
+  column(3, wellPanel(selectInput("command", label = h4("Task"),
                                   choices = list("Health Check" = "hc", "Daily Dashboard Revenue" = "daily_dash"),
                                   selected = 1),
                       selectInput("game_code", label = h4("Game"),
@@ -21,20 +21,20 @@ shinyUI(fluidPage(
                                      start = Sys.Date() - 2, end = Sys.Date() + 2),
                       selectInput("version", label = h4("Version"),
                                   choices = list("2.1.0" = "2.1.0", "2.1.1" = "2.1.1", "2.1.2" = "2.1.2"),
-                                  selected = 1))
+                                  selected = 1),
+                      submitButton("Update View")
+                      # downloadButton('downloadbutton','Download'))
+         
+  )),
+  column(3, wellPanel(radioButtons("cohorted", "Cohorted Metrics (Not Available for AC yet)", c("Cohorted" = "Cohorted_1", "Non-Cohorted" = "Non-Cohorted_1"))),
+         imageOutput("AC")
          
   ),
-  column(3, wellPanel(radioButtons("cohorted", "Cohorted Metrics (Not Available for AC yet)", c("Cohorted" = "Cohorted_1", "Non-Cohorted" = "Non-Cohorted_1"))),
-         imageOutput("AC"),
-         mainPanel(h4("Summary"),
-                   verbatimTextOutput("summary"))
-  ),
   
-  column(3,
-         verbatimTextOutput("dateRangeText"),
-         verbatimTextOutput("version"),
-         actionButton("compile",label = "Compile Report")
+  column(2, h4("Revenue"),
+            tableOutput("table")
+         
+         )
+       
   )
-  
-  
-))
+)

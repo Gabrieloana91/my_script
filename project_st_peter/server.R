@@ -9,13 +9,19 @@
 
 library(shiny)
 library(datasets)
+library(DT)
+
+source('~/amplitude-dashboard/dashboard-code/SharedConfig.R')
+source('~/r-lib/R/shared.R')
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
   
+
+  
   datasetInput <- reactive({
     switch(input$game_code,
-           "Alien Creeps" =  data.frame(c(0,2)),
+           "Alien Creeps" =  "AC",
            "Castle Creeps" = "CT",
            "Castle Creeps Duels" = "CCT",
            "Crafty Candy" = "CC",
@@ -58,22 +64,24 @@ shinyServer(function(input, output, session) {
     
   }, deleteFile = FALSE)
   
-  output$summary <- renderPrint({
-    
-    if(input$game_code == "AC"){
-      return(list(
-        dataset <- datasetInput(),
-        summary(dataset))
-      )
+  output$table <- renderTable({
+    if(input$game_code == "CT"){
+    data <- data.frame(revenue <- amplitude("AC", event="unverified_revenue", measured_by="sums",
+                                              group_by_properties=list(list(type="event", value="$revenue"), list(type="event", value="$revenueType")),
+                                              start=Sys.Date()-5, end=Sys.Date()-1) %>%
+                         rename(dt = date) %>% 
+                         make_currency_values_USD(., "USD", "property", "value") %>% 
+                         rename(date = dt) %>% 
+                         group_by(Date = as.character(date)) %>% 
+                         summarise(Revenue = sum(revenue))
+    )
+    data
     }
-    else if(input$game_code %in% c("MM","CC","BQ","BG")){
-      return(
-        paste("nothing")
-      )
+    else if(input$game_code != "CT"){
+      paste()
     }
     
   })
   
-  
-  
+ 
 })

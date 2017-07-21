@@ -1,4 +1,4 @@
-setwd("C:\\Users\\Gabz\\Documents\\my_script\\project_st_peter")
+# setwd("C:\\Users\\Gabz\\Documents\\my_script\\project_st_peter")
 library(shiny)
 
 

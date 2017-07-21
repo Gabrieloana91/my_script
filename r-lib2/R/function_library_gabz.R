@@ -25,14 +25,14 @@ do_sale_postmortem_CT <- function(sale_name, sale_date_start, sale_duration = "2
   
   # Extended Date Range #
   
-  ext_date_start <- as.Date(sale_date_start) - 30
+  ext_date_start <- as.Date(sale_date_start) - 70
   ext_date_end <- Sys.Date()-1
   
   ############################################# -> Revenue 
   
   revenue <- amplitude("CT", event="unverified_revenue", measured_by="sums",
                        group_by_properties=list(list(type="event", value="$revenue"), list(type="event", value="$revenueType")),
-                       user_segment=list(list(prop="userdata_cohort", op="is%20not", values=list(hackers_ids))),
+                       # user_segment=list(list(prop="userdata_cohort", op="is%20not", values=list(hackers_ids))),
                        start=ext_date_start, end=Sys.Date()-1) %>% 
     filter(property != "(none)") %>% 
     rename(code = property,

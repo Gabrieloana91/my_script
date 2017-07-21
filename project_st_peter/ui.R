@@ -12,6 +12,7 @@ shinyUI(fluidPage(
                                   selected = 1),
                       selectInput("game_code", label = h4("Game"),
                                   choices = list("Alien Creeps" = "AC", "Castle Creeps" = "CT",
+                                                 "Castle Creeps Duel" = "CCD",
                                                  "Crafty Candy" = "CC", "Mystery Match" = "MM",
                                                  "Bubble Genius" = "BG", "Booty Quest" = "BQ"),
                                   selected = 1),
@@ -24,7 +25,9 @@ shinyUI(fluidPage(
          
   ),
   column(3, wellPanel(radioButtons("cohorted", "Cohorted Metrics (Not Available for AC yet)", c("Cohorted" = "Cohorted_1", "Non-Cohorted" = "Non-Cohorted_1"))),
-         imageOutput("AC")
+         imageOutput("AC"),
+         mainPanel(h4("Summary"),
+                   verbatimTextOutput("summary"))
   ),
   
   column(3,
@@ -32,5 +35,6 @@ shinyUI(fluidPage(
          verbatimTextOutput("version"),
          actionButton("compile",label = "Compile Report")
   )
+  
   
 ))

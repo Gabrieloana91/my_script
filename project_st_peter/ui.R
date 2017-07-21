@@ -5,7 +5,7 @@ library(shiny)
 
 shinyUI(fluidPage(
   
-  titlePanel("Project Datenmeister V2"),
+  titlePanel("Project St Peter"),
   
   column(4, wellPanel(selectInput("command", label = h4("Task"),
                                   choices = list("Health Check" = "hc", "Daily Dashboard Revenue" = "daily_dash"),

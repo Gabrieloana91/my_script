@@ -6,31 +6,31 @@ function(input, output){
   
   
   output$ui <- renderUI({
-  if(is.null(input$task_type))
-    return()
-  
-  
-  # Depending on input$input_type, a different UI component will be generated and sent to the client
-  # This part should be designed as a config file. 
+    if(is.null(input$task_type))
+      return()
     
-  
-  switch(input$task_type,
-    # "Daily Dashboard" = selectInput("daily_dash_type", "Please Choose Segment",
-    #                                 choices = c("All" = "daily_dash_type_all",
-    #                                             "KPI" = "daily_dash_type_kpi",
-    #                                             "Design" = "daily_dash_type_design")),
-   
-    "Marketing Data" = selectInput("country", "Select Country", list(
-                                    "Tier 1" = c("United States", "United Kingdom", "Australia", "Canada", "Germany", "Switzerland"),
-                                    "Rest of World" = c("Spain", "Portugal", "Greece", "Romania", "France")),
-                                   selectize = T, multiple = T),
     
-    "Health Check" = selectInput("hc_version", "Select Version",
-                                 choices = c("2.4.1" = "2.4.1",
-                                             "2.4.2" = "2.4.2",
-                                             "2.4.3" = "2.4.3")))
+    # Depending on input$input_type, a different UI component will be generated and sent to the client
+    # This part should be designed as a config file. 
     
-  
+    
+    switch(input$task_type,
+           # "Daily Dashboard" = selectInput("daily_dash_type", "Please Choose Segment",
+           #                                 choices = c("All" = "daily_dash_type_all",
+           #                                             "KPI" = "daily_dash_type_kpi",
+           #                                             "Design" = "daily_dash_type_design")),
+           
+           "Marketing Data" = selectInput("country", "Select Country", list(
+             "Tier 1" = c("United States", "United Kingdom", "Australia", "Canada", "Germany", "Switzerland"),
+             "Rest of World" = c("Spain", "Portugal", "Greece", "Romania", "France")),
+             selectize = T, multiple = T),
+           
+           "Health Check" = selectInput("hc_version", "Select Version",
+                                        choices = c("2.4.1" = "2.4.1",
+                                                    "2.4.2" = "2.4.2",
+                                                    "2.4.3" = "2.4.3")))
+    
+    
   })  
   
   # Output the images as the game is changed
@@ -59,7 +59,7 @@ function(input, output){
   # Plot the revenue and assign "game" to game_code for data retrieval.
   
   output$revenue <- renderPlot({
-  
+    
     if(input$game_code == input$game_code & input$task_type == "Daily Dashboard" & input$compile_button == T){
       
       
@@ -99,9 +99,9 @@ function(input, output){
     else(return(paste("nothing to display")))
     
   })
-
+  
   ### New Users
-      
+  
   output$new_users <- renderPlot({
     
     if(input$game_code == input$game_code & input$task_type == "Daily Dashboard" & input$compile_button == T){
@@ -118,15 +118,15 @@ function(input, output){
       }
       else(return("nothing"))
       
-    
+      
       data <- amplitude(game, event=first_launch, measured_by="uniques",
                         group_by_properties=list(list(type="user", value="store")),
                         start=input$daily_dash_date-30, end=input$daily_dash_date-1) %>%
         filter(property != "(none)") %>% 
         rename(new_users = value) %>% 
         as.data.frame()
-  
-  
+      
+      
       ggplot(data, aes(as.Date(date), new_users, fill = property))+
         geom_bar(stat = "identity", position = "stack")+
         scale_x_date(name = "",limits = c(min(data$date), input$daily_dash_date-1), date_breaks = "2 day")+
@@ -140,7 +140,7 @@ function(input, output){
   })
   
   ### conversion Rate
-    
+  
   output$conversion_rate <- renderPlot({
     
     if(input$game_code == input$game_code & input$task_type == "Daily Dashboard" & (input$input.task_type_segment == "KPI" | input$input.task_type_segment == "All") & input$compile_button == T){
@@ -173,7 +173,7 @@ function(input, output){
     else(return(paste("nothing to display")))
     
   })   
-    
+  
   ### DAU
   
   output$DAU <- renderPlot({
@@ -210,11 +210,42 @@ function(input, output){
     else(return(paste("nothing to display")))
     
   })   
+  
+  ################ Comparison
+  
+  output$comparison <- DT::renderDataTable(DT::datatable({
+    
+    if(input$game_comparison %in% c("AC","CT") & input$comparison_button == T){
+    
+    comparison <- amplitude("AC", event="_active", measured_by="uniques",
+                            start=input$comparison_dates[1], end=input$comparison_dates[2]) %>%
+      rename(AC = value) %>% 
+      inner_join(amplitude("CT", event="_active", measured_by="uniques",
+                           start=input$comparison_dates[1], end=input$comparison_dates[2]) %>%
+                   rename(CT = value), by="date") %>% 
+      as.data.frame()%>% 
+      .[,c("date","AC","CT")]
+    
+    }
+    
+    else(return(paste("nothing")))
+    
+    assign("comparison", value = comparison, envir = .GlobalEnv)
+  }))
+  
+  output$download <- downloadHandler(
+    filename = function(){
+      paste(comparison,'.csv',sep='')
+    },
+    content = function(file){
+      write.csv(comparison, file)
+    }
+  )
+  
 }
 
-  
-  
-  
-  
-  
-  
+
+
+
+
+

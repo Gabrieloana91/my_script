@@ -19,13 +19,23 @@ shinyUI(fluidPage(
                         dateInput("daily_dash_date", "Date")
                       ),
                       conditionalPanel(
+                        condition = "input.task_type = 'Daily Dashboard'",
+                        selectInput("input.task_type_segment", "Please Choose Segment",
+                                    c("All","KPI","Design"))
+                      ),
+                      conditionalPanel(
                         condition = "input.task_type == 'Monetization Meeting'",
                         dateInput("monetization_date", "Date", format = "mm-yyyy")
                       ),
-                      actionButton("compile_button", "Compile Report"),
-                      actionButton("stop_button", "Stop!")),
-                      imageOutput("images")))
+                      actionButton("compile_button", "Compile Report", icon("paper-plane"),
+                                   style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                      imageOutput("images")),
         
+  column(4, plotOutput("revenue", height = "300px"),
+            plotOutput("new_users", height = "300px")),
+         
   
+  column(4, plotOutput("conversion_rate", height = "300px"),
+            plotOutput("DAU", height = "300px")))
   
 )

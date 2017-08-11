@@ -1,7 +1,6 @@
 # Daily Dashboard User Interface
 
 library(shiny)
-source('~/amplitude-dashboard/dashboard-code/SharedConfig.R')
 source('~/r-lib/R/shared.R')
 
 

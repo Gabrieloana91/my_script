@@ -1,6 +1,6 @@
 
 
-do_sale_postmortem_CT <- function(sale_name, sale_date_start, sale_duration = "2", comparison_before = "14", comparison_after = "7"){
+do_sale_postmortem_CT <- function(sale_name, sale_date_start, sale_duration = "2", comparison_before, comparison_after){
   
   # This function performs a post-mortem analysis for sale events in Castle Creeps Only. 
   # The inputs are sale_name which is used for writing the csv file, sale_duration is expressed as a number of days. 
@@ -13,8 +13,8 @@ do_sale_postmortem_CT <- function(sale_name, sale_date_start, sale_duration = "2
   sale_duration <- as.numeric(sale_duration)
   sale_end = as.Date(sale_date_start) + sale_duration - 1
   
-  week_before_start = as.Date(sale_date_start)-as.numeric(comparison_before)
-  week_before_end = as.Date(sale_end)-as.numeric(comparison_before)
+  week_before_start = as.Date(comparison_before)
+  week_before_end = as.Date(comparison_before) + sale_duration - 1
   
   week_after_start = as.Date(sale_date_start)+as.numeric(comparison_after)
   week_after_end = as.Date(sale_end)+as.numeric(comparison_after)
@@ -27,6 +27,13 @@ do_sale_postmortem_CT <- function(sale_name, sale_date_start, sale_duration = "2
   
   ext_date_start <- as.Date(sale_date_start) - 70
   ext_date_end <- Sys.Date()-1
+  
+  
+  # Start the connection for collecting all amplitude API cost
+  
+  cost <- vector("character")
+  con <- textConnection("cost", "wr", local = T)
+  sink(con)
   
   ############################################# -> Revenue 
   
@@ -375,7 +382,12 @@ do_sale_postmortem_CT <- function(sale_name, sale_date_start, sale_duration = "2
   
   ave_purchases
   
-  
+  sink()
+  close(con)
+  cost <- as.data.frame(gsub("The cost of your API request is","",cost))
+  names(cost) <- "cost"
+  cost$cost <- as.numeric(as.character(cost$cost))
+  print(paste0("The total API cost for your query is ", sum(cost$cost)))
   
 }
 

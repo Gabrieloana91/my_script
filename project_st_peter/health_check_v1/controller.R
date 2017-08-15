@@ -1,4 +1,4 @@
-df <- fread("C:\\Users\\gabriel.oana\\Documents\\my_script\\project_st_peter\\health_check_v1\\data.csv")
+df <- fread("D:\\data.csv")
 
 # 1. cleaning 
 
@@ -11,4 +11,5 @@ df$revenue[is.na(df$revenue)] <- 0
 
 df <- df %>% 
   filter(cohort_id != ".")
+
 

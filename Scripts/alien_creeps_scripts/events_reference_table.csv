@@ -1,0 +1,16 @@
+﻿genre,game_code,event_type,event_name,event_id,start_dt,end_dt
+midcore,AC,special_area,event_1,1,2016-05-20,2016-05-27
+midcore,AC,special_area,event_2,2,2016-06-17,2016-06-27
+midcore,AC,special_area,event_3,3,2016-07-25,2016-08-04
+midcore,AC,special_area,event_4,4,2016-08-22,2016-09-01
+midcore,AC,special_area,event_5,5,2016-09-23,2016-10-02
+midcore,AC,special_area,event_6,6,2016-11-17,2016-11-25
+midcore,AC,special_area,event_7,7,2016-12-23,2017-01-01
+midcore,AC,special_area,event_8,8,2017-03-17,2017-03-27
+midcore,AC,special_area,event_9,9,2017-04-14,2017-04-24
+midcore,AC,special_area,event_10,10,2017-05-19,2017-05-29
+midcore,AC,special_area,event_11,11,2017-06-16,2017-06-30
+midcore,AC,special_area,event_12,12,2017-07-21,2017-07-30
+midcore,CT,gauntlet,gauntlet_1,1,2017-05-23,2017-05-30
+midcore,CT,gauntlet,gauntlet_2,2,2017-07-04,2017-07-11
+midcore,CT,gauntlet,gauntlet_3,3,2017-08-17,2017-08-21
